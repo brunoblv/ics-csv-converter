@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Upload, FileText, Download, Loader2 } from 'lucide-react';
 
-// URL para a biblioteca ical.js que fará a conversão no navegador
+
 const ICAL_JS_URL = "https://cdn.jsdelivr.net/npm/ical.js/build/ical.min.js";
 
 export default function App() {
@@ -13,9 +13,9 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
-  // Efeito para carregar o script da biblioteca ical.js dinamicamente
+ 
   useEffect(() => {
-    // Verifica se o script já foi adicionado ao documento
+    
     if (document.querySelector(`script[src="${ICAL_JS_URL}"]`)) {
         setIsScriptLoaded(true);
         return;
@@ -33,7 +33,7 @@ export default function App() {
     };
     document.body.appendChild(script);
 
-    // Função de limpeza para remover o script quando o componente for desmontado
+    
     return () => {
         const existingScript = document.querySelector(`script[src="${ICAL_JS_URL}"]`);
         if (existingScript) {
@@ -57,7 +57,7 @@ export default function App() {
     }
   };
 
-  // Função atualizada para fazer a conversão diretamente no navegador
+ 
   const handleConvert = () => {
     if (!file) {
       setError("Nenhum ficheiro selecionado.");
@@ -86,7 +86,7 @@ export default function App() {
         const vevents = vcalendar.getAllSubcomponents('vevent');
 
         const csvRows = [];
-        // **CORREÇÃO APLICADA AQUI**: Os cabeçalhos foram reordenados para corresponder à nova lógica.
+       
         const headers = [
             'Coluna 1', 'Coluna 2', 'Coluna 3', 'Nome', 'Documento', 'Atendente', 'Setor', 'Processo',
             'Data de Início', 'Hora de Início', 'Data de Fim', 'Hora de Fim', 'Dia Inteiro',
@@ -105,15 +105,15 @@ export default function App() {
             const isAllDay = event.isAllDay;
 
             const quote = (field: any): string => {
-                const str = String(field || '').replace(/"/g, '""').replace(/(\r\n|\n|\r)/gm, " "); // Remove quebras de linha
+                const str = String(field || '').replace(/"/g, '""').replace(/(\r\n|\n|\r)/gm, " "); 
                 return `"${str.trim()}"`;
             };
 
-            // **CORREÇÃO APLICADA AQUI**: A lógica agora divide o campo "summary" (Assunto) em vez do "description".
+           
             const summaryText = event.summary || '';
             const summaryParts = summaryText.split(';');
 
-            // Garante que existam sempre colunas suficientes para os dados, mesmo que vazias
+            
             const MAX_SUMMARY_PARTS = 8; 
             const paddedSummaryParts = new Array(MAX_SUMMARY_PARTS).fill('');
             for (let i = 0; i < MAX_SUMMARY_PARTS; i++) {
@@ -123,13 +123,13 @@ export default function App() {
             }
 
             const row = [
-                ...paddedSummaryParts.map(part => quote(part)), // Adiciona as partes do Assunto como colunas separadas no início
+                ...paddedSummaryParts.map(part => quote(part)), 
                 startDate.toLocaleDateString('pt-BR', formatOptionsDate),
                 isAllDay ? '' : startDate.toLocaleTimeString('pt-BR', formatOptionsTime),
                 endDate.toLocaleDateString('pt-BR', formatOptionsDate),
                 isAllDay ? '' : endDate.toLocaleTimeString('pt-BR', formatOptionsTime),
                 isAllDay ? 'Sim' : 'Não',
-                quote(event.description), // A descrição original é agora uma única coluna
+                quote(event.description), 
                 quote(event.location),
             ];
             csvRows.push(row.join(';'));
@@ -185,7 +185,7 @@ export default function App() {
             <div className="relative border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-blue-500 transition-colors duration-300">
               <Upload className="mx-auto h-8 w-8 text-slate-400 mb-2" />
               <label htmlFor="file-upload" className="cursor-pointer">
-                <span className="font-semibold text-blue-600">Clique para enviar um ficheiro</span>
+                <span className="font-semibold text-blue-600">Clique para enviar um arquivo</span>
                 <span className="text-slate-500"> ou arraste e solte</span>
               </label>
               <input 
@@ -233,7 +233,7 @@ export default function App() {
           </div>
         </div>
         <footer className="text-center mt-8">
-            <p className="text-sm text-slate-500">Criado com Next.js 15 (Abordagem Client-Side)</p>
+            <p className="text-sm text-slate-500">SMUL - Secretaria Municipal de Urbanismo e Licenciamento</p>
         </footer>
       </div>
     </div>

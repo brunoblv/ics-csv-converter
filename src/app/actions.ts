@@ -1,29 +1,28 @@
-'use server'; // Diretiva que define este como um módulo de Server Actions
+'use server'; 
 
-// A biblioteca node-ical é mais robusta para o lado do servidor.
-// Certifique-se de que está instalada: npm install node-ical
+
 import ical from 'node-ical';
 
-// Define o tipo de retorno da nossa ação
+
 type ConversionResult = {
   csvData?: string;
   error?: string;
 };
 
-// Função auxiliar para escapar caracteres especiais para CSV
+
 const escapeCsvField = (field: any): string => {
   if (field === null || field === undefined) {
     return '';
   }
   const stringField = String(field);
-  // Se o campo contém vírgula, aspas ou quebra de linha, ele deve ser envolvido em aspas
+  
   if (/[",\n\r]/.test(stringField)) {
     return `"${stringField.replace(/"/g, '""')}"`;
   }
   return stringField;
 };
 
-// A Server Action que faz a conversão
+
 export async function convertIcsToCsvAction(formData: FormData): Promise<ConversionResult> {
   try {
     const file = formData.get('file') as File;
@@ -43,7 +42,7 @@ export async function convertIcsToCsvAction(formData: FormData): Promise<Convers
     ];
     csvRows.push(headers.join(','));
 
-    // Processa cada evento do calendário
+    
     for (const k in events) {
       if (Object.prototype.hasOwnProperty.call(events, k)) {
         const event = events[k];
